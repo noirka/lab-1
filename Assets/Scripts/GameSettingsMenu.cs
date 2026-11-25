@@ -30,7 +30,7 @@ public class GameSettingsMenu : MonoBehaviour
 
   [Header("Стандартні значення")]
   [SerializeField] private bool defaultFlashlightOn = true;
-  [SerializeField] private bool defaultPokeMode = false;
+  [SerializeField] private bool defaultPokeMode = true;
   [SerializeField] private float defaultFlashlightBrightness = 2.5f;
   [SerializeField] private float defaultVignette = 0.25f;
 
