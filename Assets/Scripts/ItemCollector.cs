@@ -9,6 +9,9 @@ public class ItemCollector : MonoBehaviour
   public AudioSource screamerAudio;
   public float displayDuration = 2.0f;
 
+  [Header("Телеметрія")]
+  public TelemetryAndApi telemetryApi;
+
   private bool isTriggered = false;
 
   private void Awake()
@@ -27,6 +30,9 @@ public class ItemCollector : MonoBehaviour
     {
       Debug.Log("Знайдено містичний предмет: " + other.gameObject.name);
       isTriggered = true;
+
+      if (telemetryApi != null)
+        telemetryApi.RecordGhostItemCollected();
 
       StartCoroutine(TriggerScreamer(other.gameObject));
     }

@@ -3,6 +3,7 @@ using UnityEngine;
 public class WallNote : MonoBehaviour
 {
   [SerializeField] private NotePopupUI popupUI;
+  [SerializeField] private TelemetryAndApi telemetryApi;
   [SerializeField] private string noteTitle = "Записка";
   [TextArea(3, 8)]
   [SerializeField] private string noteBody = "Текст записки...";
@@ -10,6 +11,9 @@ public class WallNote : MonoBehaviour
 
   public void OnHoverEntered()
   {
+    if (telemetryApi != null)
+      telemetryApi.RecordNoteViewed(string.IsNullOrEmpty(noteTitle) ? gameObject.name : noteTitle);
+
     if (popupUI == null)
       return;
 

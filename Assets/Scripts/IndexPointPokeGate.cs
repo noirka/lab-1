@@ -83,12 +83,12 @@ public class IndexPointPokeGate : MonoBehaviour
         ApplyPokeState(false);
     }
 
-    Debug.Log(
-    $"[PokeGate] tracked={handTrackingEvents?.handIsTracked} " +
-    $"idx={indexDist:F3} (min={indexExtendedMinDist}) " +
-    $"othersAvg={avgOtherDist:F3} (max={otherFingersCurledMaxDist}) " +
-    $"pointing={isPointingActive}"
-);
+    //  Debug.Log(
+    //  $"[PokeGate] tracked={handTrackingEvents?.handIsTracked} " +
+    //   $"idx={indexDist:F3} (min={indexExtendedMinDist}) " +
+    //   $"othersAvg={avgOtherDist:F3} (max={otherFingersCurledMaxDist}) " +
+    //   $"pointing={isPointingActive}"
+    //);
   }
 
   private bool TryGetJointPos(XRHand hand, XRHandJointID jointId, out Vector3 pos)

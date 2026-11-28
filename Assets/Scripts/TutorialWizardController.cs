@@ -36,6 +36,9 @@ public class TutorialWizardController : MonoBehaviour
   [SerializeField] private Button nextButton;
   [SerializeField] private TMP_Text nextButtonLabel;
 
+  [Header("Телеметрія")]
+  [SerializeField] private TelemetryAndApi telemetryApi;
+
   [Header("Кроки інструктажу (State Machine)")]
   [SerializeField]
   private List<WizardStep> steps = new List<WizardStep>
@@ -159,6 +162,9 @@ public class TutorialWizardController : MonoBehaviour
   {
     CurrentState = WizardState.Completed;
     wizardPanel.SetActive(false);
+
+    if (telemetryApi != null)
+      telemetryApi.StartMazeRunTimer();
   }
 
   public void CloseWizard()

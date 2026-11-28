@@ -32,7 +32,7 @@ public class PokeMutualExclusiveSwitcher : MonoBehaviour
       if (ignoredPressCounter < ignoreFirstPresses)
       {
         ignoredPressCounter++;
-        Debug.Log($"[PokeSwitcher] Ignored key press #{ignoredPressCounter}");
+        // Debug.Log($"[PokeSwitcher] Ignored key press #{ignoredPressCounter}");
         return;
       }
 
@@ -65,7 +65,7 @@ public class PokeMutualExclusiveSwitcher : MonoBehaviour
 
     if (logChange)
     {
-      Debug.Log($"[PokeSwitcher] Mode switched -> isHandsMode={isHandsMode}");
+      // Debug.Log($"[PokeSwitcher] Mode switched -> isHandsMode={isHandsMode}");
     }
   }
 

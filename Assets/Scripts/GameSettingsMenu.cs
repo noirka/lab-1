@@ -34,6 +34,9 @@ public class GameSettingsMenu : MonoBehaviour
   [SerializeField] private float defaultFlashlightBrightness = 2.5f;
   [SerializeField] private float defaultVignette = 0.25f;
 
+  [Header("Телеметрія та погода")]
+  [SerializeField] private TelemetryAndApi telemetryApi;
+
   private const string KeyFlashlightOn = "Settings_FlashlightOn";
   private const string KeyPokeMode = "Settings_PokeMode";
   private const string KeyBrightness = "Settings_Brightness";
@@ -64,6 +67,7 @@ public class GameSettingsMenu : MonoBehaviour
 
   public void TogglePanel()
   {
+    Debug.Log("[Lab5] TogglePanel викликано");
     bool nextState = !settingsPanel.activeSelf;
     settingsPanel.SetActive(nextState);
 
@@ -78,6 +82,14 @@ public class GameSettingsMenu : MonoBehaviour
       Vector3 lookDir = settingsPanel.transform.position - spawnReference.position;
       if (lookDir.sqrMagnitude > 0.0001f)
         settingsPanel.transform.rotation = Quaternion.LookRotation(lookDir);
+    }
+
+    if (telemetryApi != null)
+    {
+      if (nextState)
+        telemetryApi.ShowWeatherPanelAndFetch();
+      else
+        telemetryApi.HideWeatherPanel();
     }
   }
 

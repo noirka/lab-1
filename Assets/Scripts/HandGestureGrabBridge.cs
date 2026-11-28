@@ -24,7 +24,7 @@ public class HandGestureGrabBridge : MonoBehaviour
   {
     if (directInteractor == null || interactionManager == null)
     {
-      Debug.LogWarning("[HandGrabBridge] StartGrab: відсутній directInteractor або interactionManager");
+      // Debug.LogWarning("[HandGrabBridge] StartGrab: відсутній directInteractor або interactionManager");
       return;
     }
 
@@ -34,11 +34,11 @@ public class HandGestureGrabBridge : MonoBehaviour
     IXRSelectInteractable target = FindBestTarget();
     if (target == null)
     {
-      Debug.Log("[HandGrabBridge] StartGrab: target is null (нічого не в Hover)");
+      // Debug.Log("[HandGrabBridge] StartGrab: target is null (нічого не в Hover)");
       return;
     }
 
-    Debug.Log($"[HandGrabBridge] StartGrab: беру {target.transform.name}");
+    // Debug.Log($"[HandGrabBridge] StartGrab: беру {target.transform.name}");
     interactionManager.SelectEnter((IXRSelectInteractor)directInteractor, target);
     currentGrabbed = target;
   }
@@ -48,7 +48,7 @@ public class HandGestureGrabBridge : MonoBehaviour
     if (currentGrabbed == null || directInteractor == null || interactionManager == null)
       return;
 
-    Debug.Log($"[HandGrabBridge] ReleaseGrab: відпускаю {currentGrabbed.transform.name}");
+    // Debug.Log($"[HandGrabBridge] ReleaseGrab: відпускаю {currentGrabbed.transform.name}");
     interactionManager.SelectExit((IXRSelectInteractor)directInteractor, currentGrabbed);
     currentGrabbed = null;
   }
