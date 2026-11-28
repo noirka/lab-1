@@ -44,7 +44,7 @@ public class TelemetryAndApi : MonoBehaviour
     public int uniqueNotesViewed;
     public List<string> viewedNoteIds;
     public int ghostItemsCollected;
-    public int errorsCount;
+    public string startedAtUtc;
     public string completedAtUtc;
   }
 
@@ -79,12 +79,12 @@ public class TelemetryAndApi : MonoBehaviour
 
   private readonly HashSet<string> viewedNotes = new HashSet<string>();
   private int ghostItemsCollected = 0;
-  private int errorsCount = 0;
 
   private float runStartTime = -1f;
   private bool isRunActive = false;
   private bool reportSentForCurrentRun = false;
   private string currentSessionId = string.Empty;
+  private string runStartedAtUtc = string.Empty;
 
   private void Awake()
   {
@@ -98,6 +98,7 @@ public class TelemetryAndApi : MonoBehaviour
       finishSummaryPanel.SetActive(false);
 
     currentSessionId = $"{sessionIdPrefix}-{Guid.NewGuid().ToString("N").Substring(0, 6)}";
+    runStartedAtUtc = DateTime.UtcNow.ToString("o");
   }
 
   private void OnEnable()
@@ -116,11 +117,11 @@ public class TelemetryAndApi : MonoBehaviour
   {
     viewedNotes.Clear();
     ghostItemsCollected = 0;
-    errorsCount = 0;
     runStartTime = Time.time;
     isRunActive = true;
     reportSentForCurrentRun = false;
     currentSessionId = $"{sessionIdPrefix}-{Guid.NewGuid().ToString("N").Substring(0, 6)}";
+    runStartedAtUtc = DateTime.UtcNow.ToString("o");
 
     if (finishSummaryPanel != null)
       finishSummaryPanel.SetActive(false);
@@ -137,11 +138,6 @@ public class TelemetryAndApi : MonoBehaviour
   public void RecordGhostItemCollected()
   {
     ghostItemsCollected++;
-  }
-
-  public void RecordError()
-  {
-    errorsCount++;
   }
 
   public void ShowWeatherPanelAndFetch()
@@ -183,6 +179,9 @@ public class TelemetryAndApi : MonoBehaviour
     isRunActive = false;
     reportSentForCurrentRun = true;
 
+    string completedUtc = DateTime.UtcNow.ToString("o");
+    string startUtc = string.IsNullOrEmpty(runStartedAtUtc) ? completedUtc : runStartedAtUtc;
+
     MazeRunReport report = new MazeRunReport
     {
       sessionId = currentSessionId,
@@ -190,8 +189,8 @@ public class TelemetryAndApi : MonoBehaviour
       uniqueNotesViewed = viewedNotes.Count,
       viewedNoteIds = new List<string>(viewedNotes),
       ghostItemsCollected = ghostItemsCollected,
-      errorsCount = errorsCount,
-      completedAtUtc = DateTime.UtcNow.ToString("o")
+      startedAtUtc = startUtc,
+      completedAtUtc = completedUtc
     };
 
     ShowFinishSummaryPanel(report);
@@ -219,12 +218,25 @@ public class TelemetryAndApi : MonoBehaviour
 
     if (finishSummaryText != null)
     {
+      string startShort = FormatShortUtcTime(report.startedAtUtc);
+      string endShort = FormatShortUtcTime(report.completedAtUtc);
+
       finishSummaryText.text =
+        $"Сесія: {report.sessionId}\n" +
         $"Час проходження: {report.durationSeconds:F1} с\n" +
         $"Переглянуто записок: {report.uniqueNotesViewed}\n" +
         $"Зібрано GhostItem: {report.ghostItemsCollected}\n" +
-        $"Помилок: {report.errorsCount}";
+        $"Початок (UTC): {startShort}\n" +
+        $"Завершення (UTC): {endShort}";
     }
+  }
+
+  private string FormatShortUtcTime(string isoUtc)
+  {
+    if (DateTime.TryParse(isoUtc, out DateTime parsed))
+      return parsed.ToUniversalTime().ToString("HH:mm:ss");
+
+    return isoUtc;
   }
 
   private IEnumerator FetchWeatherRoutine()
